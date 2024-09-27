@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useThemeStore } from './stores/themeStore'
 import Home from './views/Home.vue'
 import Navbar from './components/Navbar.vue'
+import Footer from './components/Footer.vue'
 
 const themeStore = useThemeStore();
 const themeClass = computed(() => (themeStore.isDarkMode ? 'dark' : ''));
@@ -13,6 +14,7 @@ const themeClass = computed(() => (themeStore.isDarkMode ? 'dark' : ''));
     <div class="bg-white dark:bg-[#3d3d3d] min-h-screen">
       <Navbar />
       <Home />
+      <Footer />
     </div>
   </div>
 </template>
