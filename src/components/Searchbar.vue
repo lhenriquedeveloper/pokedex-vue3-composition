@@ -47,7 +47,5 @@ const clearSearch = () => {
   }
 }
 
-.focus\:ring-2:focus {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
+
 </style>

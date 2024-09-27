@@ -12,7 +12,7 @@
         <button
           type="button"
           @click="toggleTheme"
-          class="ml-4 bg-background dark:bg-background-dark p-1 rounded-full text-muted-foreground hover:text-primary"
+          class=" text-muted-foreground hover:text-primary transition-all duration-500"
         >
           <span class="sr-only">Toggle theme</span>
           <SunIcon class="h-6 w-6" v-if="!themeStore.isDarkMode" />
