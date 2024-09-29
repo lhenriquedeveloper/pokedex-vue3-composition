@@ -2,7 +2,9 @@
   <div class="mt-8 px-4 md:p-0">
     <Searchbar v-model="searchParams" />
   </div>
-  <div class="my-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-y-4">
+  <div
+    class="my-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6 gap-y-4"
+  >
     <Card
       v-for="(pokemon, index) in filteredPokemons"
       :key="index"
@@ -23,27 +25,22 @@ interface Pokemon {
 }
 const pokemons = ref<Pokemon[]>([]);
 const filteredPokemons = ref<Pokemon[]>([]);
-const searchParams = ref({ query: "", type: "" });
-const allTypes = ref<string[]>([]);
+const searchParams = ref({ query: "" });
 
 const fetchPokemons = async () => {
   try {
     const response = await api.get<Pokemon[]>("pokemon");
-    pokemons.value = response.data.results.map(pokemon => ({
+    pokemons.value = response.data.results.map((pokemon) => ({
       ...pokemon,
-      types: [] 
+      types: [],
     }));
-    filteredPokemons.value = [...pokemons.value]; 
+    filteredPokemons.value = [...pokemons.value];
   } catch (error) {
     console.error("Error fetching Pokémon:", error);
   }
 };
-const handleTypesLoaded = (types: string[]) => {
-  allTypes.value.push(...types);
-  console.log("teste",allTypes.value)
-};
 const filterPokemons = () => {
-  const { query, type } = searchParams.value;
+  const query = searchParams.value.query;
   const normalizedQuery = query.toLowerCase();
 
   filteredPokemons.value = pokemons.value.filter((pokemon) => {
@@ -56,6 +53,6 @@ onMounted(() => {
   fetchPokemons();
 });
 watch(searchParams, () => {
-  filterPokemons(); 
+  filterPokemons();
 });
 </script>

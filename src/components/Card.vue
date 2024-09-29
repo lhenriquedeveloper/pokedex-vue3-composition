@@ -83,7 +83,6 @@ const fetchPokemonData = async () => {
   try {
     const response = await axios.get(props.url);
     const data = response.data;
-
     pokemon.value.id = data.id;
     pokemon.value.name = data.name;
     pokemon.value.image = data.sprites.front_default;

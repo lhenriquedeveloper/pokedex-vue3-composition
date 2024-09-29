@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isOpen"
+    v-if="isOpen && pokemon && pokemon.name"
     class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
   >
     <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-3xl flex">
@@ -21,7 +21,9 @@
           </button>
         </div>
         <div class="mb-4">
-          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">Types:</h4>
+          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">
+            Types:
+          </h4>
           <div class="flex space-x-2">
             <span
               v-for="type in pokemon.types"
@@ -34,9 +36,14 @@
           </div>
         </div>
         <div class="mb-4">
-          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">Statistics:</h4>
+          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">
+            Statistics:
+          </h4>
           <div v-for="(stat, index) in pokemon.stats" :key="index" class="mb-2">
-            <span class="block text-muted-foreground dark:text-muted-darkForeground">{{ stat.name }}: {{ stat.value }}</span>
+            <span
+              class="block text-muted-foreground dark:text-muted-darkForeground"
+              >{{ stat.name }}: {{ stat.value }}</span
+            >
             <div class="w-full bg-gray-300 rounded-full h-2">
               <div
                 class="bg-primary dark:bg-primary-dark h-2 rounded-full transition-all duration-500 ease-out"
@@ -68,8 +75,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import { getTypeColor } from '../composables/utils/getTypeColor.ts';
+import { ref, computed, watch } from "vue";
+import { getTypeColor } from "../composables/utils/getTypeColor.ts";
 import axios from "axios";
 
 const props = defineProps({
@@ -91,21 +98,24 @@ const closeModal = () => {
 
 const evolutionChain = ref([]);
 const pokemonImage = computed(() => {
-  return `https://img.pokemondb.net/sprites/home/normal/${props.pokemon.name}.png`;
+  return props.pokemon && props.pokemon.name
+    ? `https://img.pokemondb.net/sprites/home/normal/${props.pokemon.name}.png`
+    : "";
 });
 
 const fetchEvolutionData = async () => {
+  if (!props.pokemon || !props.pokemon.name) return;
+
   try {
-    const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${props.pokemon.name}`);
+    console.log("Fetching evolution data for:", props.pokemon.name);
+    const response = await axios.get(
+      `https://pokeapi.co/api/v2/pokemon-species/${props.pokemon.name}`,
+    );
     const data = response.data;
-    console.log("Pokémon Species Data:", data);  // Debug log
+
     if (data.evolution_chain) {
-      try {
-        const evolutionResponse = await axios.get(data.evolution_chain.url);
-        evolutionChain.value = extractEvolutions(evolutionResponse.data);
-      } catch (error) {
-        console.error("Error fetching Evolution Chain:", error);
-      }
+      const evolutionResponse = await axios.get(data.evolution_chain.url);
+      evolutionChain.value = extractEvolutions(evolutionResponse.data);
     } else {
       console.warn("No evolution chain found for this Pokémon.");
     }
@@ -117,7 +127,6 @@ const fetchEvolutionData = async () => {
 const extractEvolutions = (data) => {
   const evolutions = [];
   const addedEvolutions = new Set();
-  console.log("Extracting evolutions:", data);  // Debug log
 
   if (data.chain) {
     let current = data.chain;
@@ -145,9 +154,14 @@ const extractEvolutions = (data) => {
   return evolutions;
 };
 
-onMounted(() => {
-  fetchEvolutionData().then(() => {
-    console.log("Evolutions:", evolutionChain.value);
-  });
-});
+// Verificação das mudanças em pokemon e isOpen
+watch(
+  () => [props.pokemon, props.isOpen], // Monitorar pokemon e isOpen juntos
+  ([newPokemon, newIsOpen]) => {
+    if (newIsOpen && newPokemon && newPokemon.name) {
+      fetchEvolutionData(); // Executa a busca quando o modal abre e pokemon está disponível
+    }
+  },
+  { immediate: true }, // Executa imediatamente para garantir a verificação inicial
+);
 </script>
