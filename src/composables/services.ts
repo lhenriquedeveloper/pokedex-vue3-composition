@@ -1,39 +1,72 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 
-const baseUrl = "https://pokeapi.co/api/v2/";
+// Define the base API URL
+export const API_URL = "https://pokeapi.co/api/v2";
 
-const headers = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  Accept: "*/*",
+// Create a typed API client
+const API = (url = API_URL): AxiosInstance => {
+  return axios.create({
+    baseURL: url,
+  });
+};
+
+export interface Pokemon {
+  id: number;
+  name: string;
+}
+
+export interface PokemonResponse {
+  value: { id: number; name: string; }[];
+  results: Pokemon[];
+}
+
+export interface Region {
+  id: number;
+  name: string;
+}
+
+export interface Generation {
+  id: number;
+  name: string;
+}
+
+export interface Type {
+  id: number;
+  name: string;
+}
+
+
+export const makeConcurrentRequests = <T>(requests: Promise<T>[]): Promise<T[]> => {
+  return axios.all(requests);
+};
+
+// Get all Pokémon
+export const getAllPokemons = (): Promise<AxiosResponse<PokemonResponse>> => {
+  return API().get<PokemonResponse>("/pokemon?limit=-1");
+};
+
+// Get Pokémon (with limit)
+export const getPokemons = (offset: number, limit: number): Promise<AxiosResponse<PokemonResponse>> => {
+  return API().get<PokemonResponse>(`/pokemon?offset=${offset}&limit=${limit}`);
+};
+
+// Get Pokémon by name
+export const getPokemonByName = (name: string): Promise<AxiosResponse<Pokemon>> => {
+  return API().get<Pokemon>(`/pokemon/${name}`);
 };
 
 
-const axiosInstance: AxiosInstance = axios.create({
-  method: "GET",
-  baseURL: baseUrl,
-  headers: headers,
-});
-
-
-interface ApiResponse<T> extends AxiosResponse<T> {}
-
-export const api = {
-  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
-    return axiosInstance.get<T>(endpoint);
-  },
-
-  async post<T, R>(endpoint: string, body: T): Promise<ApiResponse<R>> {
-    return axiosInstance.post<T, AxiosResponse<R>>(endpoint, body);
-  },
-
-  async put<T, R>(endpoint: string, body: T): Promise<ApiResponse<R>> {
-    return axiosInstance.put<T, AxiosResponse<R>>(endpoint, body);
-  },
-
-  async delete<R>(endpoint: string): Promise<ApiResponse<R>> {
-    return axiosInstance.delete<R>(endpoint);
-  },
+// Get region by name
+export const getRegionByName = (name: string): Promise<AxiosResponse<Region>> => {
+  return API().get<Region>(`/region/${name}`);
 };
 
-export default axiosInstance;
+// Get generation by ID
+export const getGenerationById = (id: number): Promise<AxiosResponse<Generation>> => {
+  return API().get<Generation>(`/generation/${id}`);
+};
+
+// Get type by name
+export const getTypeByName = (name: string): Promise<AxiosResponse<Type>> => {
+  return API().get<Type>(`/type/${name}`);
+};

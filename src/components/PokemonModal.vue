@@ -53,19 +53,19 @@
           </div>
         </div>
         <div v-if="evolutionChain.length" class="mb-4">
-          <h4 class="font-semibold mb-2">Evolution Chain:</h4>
+          <h4 class="font-semibold mb-2 text-black dark:text-white">Evolution Chain:</h4>
           <div class="flex items-center space-x-4">
             <div
               v-for="evolution in evolutionChain"
               :key="evolution.name"
-              class="flex flex-col items-center"
+              class="flex flex-col items-center p-6 w-[120px] rounded-xl bg-background dark:bg-background-dark cursor-pointer shadow-xl hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
             >
               <img
                 :src="evolution.image"
                 :alt="evolution.name"
                 class="w-16 h-16 object-cover rounded-full mb-1"
               />
-              <span>{{ evolution.name }}</span>
+              <span class="text-primary capitalize italic text-base ">{{ evolution.name }}</span>
             </div>
           </div>
         </div>
