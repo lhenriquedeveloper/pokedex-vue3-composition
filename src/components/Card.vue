@@ -15,6 +15,13 @@
         >
           #{{ pokemon.id }}
         </div>
+        <button
+          @click.stop="toggleFavorite"
+          class="absolute top-2 left-2 text-white focus:outline-none"
+        >
+          <Heart v-if="!isFavorite" class="text-primary"/>
+          <Heart v-if="isFavorite" class="text-primary" fill="#ff4757"/>
+        </button>
       </div>
       <div class="p-4">
         <h2 class="text-2xl font-bold text-primary dark:text-primary-dark mb-2">
@@ -63,8 +70,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import PokemonModal from "./PokemonModal.vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
-
-
+import { Heart } from "lucide-vue-next";
 export default {
   props: {
     name: {
@@ -79,6 +85,7 @@ export default {
 
   components: {
     PokemonModal,
+    Heart,
   },
 
   setup(props) {
@@ -91,6 +98,7 @@ export default {
     });
 
     const isModalOpen = ref(false);
+    const isFavorite = ref(false);
 
     const fetchPokemonData = async () => {
       try {
@@ -104,9 +112,32 @@ export default {
           name: statInfo.stat.name,
           value: statInfo.base_stat,
         }));
+        checkFavoriteStatus();
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
       }
+    };
+
+    const checkFavoriteStatus = () => {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      isFavorite.value = favorites.includes(pokemon.value.name);
+    };
+
+    const toggleFavorite = () => {
+      const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+      if (isFavorite.value) {
+        // Remove from favorites
+        const index = favorites.indexOf(pokemon.value.name);
+        if (index > -1) {
+          favorites.splice(index, 1);
+        }
+        isFavorite.value = false;
+      } else {
+        // Add to favorites
+        favorites.push(pokemon.value.name);
+        isFavorite.value = true;
+      }
+      localStorage.setItem("favorites", JSON.stringify(favorites));
     };
 
     const openModal = () => {
@@ -124,11 +155,12 @@ export default {
     return {
       pokemon,
       isModalOpen,
+      isFavorite,
       openModal,
       closeModal,
-      getTypeColor
+      getTypeColor,
+      toggleFavorite,
     };
   },
 };
 </script>
-

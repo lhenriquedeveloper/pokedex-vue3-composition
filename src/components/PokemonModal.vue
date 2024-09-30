@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="isOpen && pokemon && pokemon.name"
-    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-8 lg:p-0"
   >
     <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-3xl flex">
       <div class="flex-shrink-0 w-1/3 flex justify-center items-center">
@@ -21,8 +21,8 @@
           </button>
         </div>
         <div class="mb-4">
-          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">
-            Types:
+          <h4 class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center">
+            Types <TypeOutline class="ml-2"/>
           </h4>
           <div class="flex space-x-2">
             <span
@@ -36,8 +36,8 @@
           </div>
         </div>
         <div class="mb-4">
-          <h4 class="font-semibold mb-2 text-[#3d3d3d] dark:text-white">
-            Statistics:
+          <h4 class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center">
+            Statistics <ChartNoAxesColumnDecreasing class="ml-2"/>
           </h4>
           <div v-for="(stat, index) in pokemon.stats" :key="index" class="mb-2">
             <span
@@ -53,19 +53,26 @@
           </div>
         </div>
         <div v-if="evolutionChain.length" class="mb-4">
-          <h4 class="font-semibold mb-2 text-black dark:text-white">Evolution Chain:</h4>
-          <div class="flex items-center space-x-4">
+          <h4 class="font-bold text-base mb-4 text-black dark:text-white flex items-center flex-row">
+            Evolution Chain <Link class="ml-2"/> 
+          </h4>
+          <div class="flex flex-col lg:flex-row items-center space-x-4">
             <div
               v-for="evolution in evolutionChain"
               :key="evolution.name"
-              class="flex flex-col items-center p-6 w-[120px] rounded-xl bg-background dark:bg-background-dark cursor-pointer shadow-xl hover:scale-105 hover:shadow-2xl transition-transform duration-300 ease-in-out"
+              class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 ease-in-out w-48 h-64 relative overflow-hidden shadow-lg cursor-pointer bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 hover:shadow-xl hover:scale-105"
             >
+              <div
+                class="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-500 to-blue-500 h-8 rounded-t-lg"
+              ></div>
               <img
                 :src="evolution.image"
                 :alt="evolution.name"
-                class="w-16 h-16 object-cover rounded-full mb-1"
+                class="w-32 h-32 object-contain rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-indigo-500 dark:border-indigo-300 z-10 mt-6 mb-4"
               />
-              <span class="text-primary capitalize italic text-base ">{{ evolution.name }}</span>
+              <span class="capitalize text-lg font-semibold italic">{{
+                evolution.name
+              }}</span>
             </div>
           </div>
         </div>
@@ -78,6 +85,8 @@
 import { ref, computed, watch } from "vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
 import axios from "axios";
+import { Link, ChartNoAxesColumnDecreasing, TypeOutline } from 'lucide-vue-next'
+
 
 export default {
   props: {
@@ -90,11 +99,16 @@ export default {
       required: true,
     },
   },
+  components:{
+    Link,
+    ChartNoAxesColumnDecreasing,
+    TypeOutline,
+  },
   emits: ["onClose"],
-  
+
   setup(props, { emit }) {
     const evolutionChain = ref([]);
-    
+
     const pokemonImage = computed(() => {
       return props.pokemon && props.pokemon.name
         ? `https://img.pokemondb.net/sprites/home/normal/${props.pokemon.name}.png`
