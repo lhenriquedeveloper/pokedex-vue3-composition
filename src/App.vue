@@ -4,7 +4,6 @@ import { useThemeStore } from './stores/themeStore'
 import Home from './views/Home.vue'
 import Navbar from './components/Navbar.vue'
 import Footer from './components/Footer.vue'
-
 const themeStore = useThemeStore();
 const themeClass = computed(() => (themeStore.isDarkMode ? 'dark' : ''));
 </script>

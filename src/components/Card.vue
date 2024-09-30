@@ -58,53 +58,77 @@
   </div>
 </template>
 
-<script setup>
+<script>
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import PokemonModal from "./PokemonModal.vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
 
-const props = defineProps({
-  name: String,
-  url: String,
-});
 
-const pokemon = ref({
-  id: null,
-  name: "",
-  image: "",
-  types: [],
-  stats: [],
-});
+export default {
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+    url: {
+      type: String,
+      required: true,
+    },
+  },
 
-const isModalOpen = ref(false);
+  components: {
+    PokemonModal,
+  },
 
-const fetchPokemonData = async () => {
-  try {
-    const response = await axios.get(props.url);
-    const data = response.data;
-    pokemon.value.id = data.id;
-    pokemon.value.name = data.name;
-    pokemon.value.image = data.sprites.front_default;
-    pokemon.value.types = data.types.map((typeInfo) => typeInfo.type.name);
-    pokemon.value.stats = data.stats.map((statInfo) => ({
-      name: statInfo.stat.name,
-      value: statInfo.base_stat,
-    }));
-  } catch (error) {
-    console.error("Error fetching Pokémon data:", error);
-  }
+  setup(props) {
+    const pokemon = ref({
+      id: null,
+      name: "",
+      image: "",
+      types: [],
+      stats: [],
+    });
+
+    const isModalOpen = ref(false);
+
+    const fetchPokemonData = async () => {
+      try {
+        const response = await axios.get(props.url);
+        const data = response.data;
+        pokemon.value.id = data.id;
+        pokemon.value.name = data.name;
+        pokemon.value.image = data.sprites.front_default;
+        pokemon.value.types = data.types.map((typeInfo) => typeInfo.type.name);
+        pokemon.value.stats = data.stats.map((statInfo) => ({
+          name: statInfo.stat.name,
+          value: statInfo.base_stat,
+        }));
+      } catch (error) {
+        console.error("Error fetching Pokémon data:", error);
+      }
+    };
+
+    const openModal = () => {
+      console.log("Modal Opened");
+      isModalOpen.value = true;
+      console.log("isModalOpen", isModalOpen.value);
+    };
+
+    const closeModal = () => {
+      isModalOpen.value = false;
+    };
+
+    onMounted(fetchPokemonData);
+
+    return {
+      pokemon,
+      isModalOpen,
+      openModal,
+      closeModal,
+      getTypeColor
+    };
+  },
 };
-
-const openModal = () => {
-  console.log("Modal Opened");
-  isModalOpen.value = true;
-  console.log("isModalOpen", isModalOpen.value);
-};
-
-const closeModal = () => {
-  isModalOpen.value = false;
-};
-
-onMounted(fetchPokemonData);
 </script>
+

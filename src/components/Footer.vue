@@ -33,15 +33,27 @@
   </footer>
 </template>
 
-<script setup>
+<script>
 import { ref, onMounted } from "vue";
 import { HeartIcon } from "lucide-vue-next";
 
-const currentYear = ref(new Date().getFullYear());
+export default {
+  components: {
+    HeartIcon, // Registra o componente HeartIcon para uso no template
+  },
+  setup() {
+    const currentYear = ref(new Date().getFullYear());
 
-onMounted(() => {
-  setInterval(() => {
-    currentYear.value = new Date().getFullYear();
-  }, 60000);
-});
+    onMounted(() => {
+      setInterval(() => {
+        currentYear.value = new Date().getFullYear();
+      }, 60000);
+    });
+
+    return {
+      currentYear,
+    };
+  },
+};
 </script>
+

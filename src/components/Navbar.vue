@@ -1,6 +1,6 @@
 <!-- src/components/Navbar.vue -->
 <template>
-  <nav class="bg-background dark:bg-background-dark  shadow-xl">
+  <nav class="bg-background dark:bg-background-dark shadow-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
@@ -12,7 +12,7 @@
         <button
           type="button"
           @click="toggleTheme"
-          class=" text-muted-foreground hover:text-primary transition-all duration-500"
+          class="text-muted-foreground hover:text-primary transition-all duration-500"
         >
           <span class="sr-only">Toggle theme</span>
           <SunIcon class="h-6 w-6" v-if="!themeStore.isDarkMode" />
@@ -23,14 +23,29 @@
   </nav>
 </template>
 
-<script setup>
+<script>
 import { computed } from 'vue'
 import { useThemeStore } from '../stores/themeStore'
 import { SunIcon, MoonIcon } from 'lucide-vue-next'
 
-const themeStore = useThemeStore()
-const themeClass = computed(() => (themeStore.isDarkMode ? 'dark' : ''))
-const toggleTheme = () => {
-  themeStore.toggleTheme()
+
+export default {
+  components: {
+      SunIcon,
+      MoonIcon,
+  },
+  setup() {
+    // Inicializando a store
+    const themeStore = useThemeStore()
+
+    // Função para alternar entre os temas
+    const toggleTheme = () => {
+      themeStore.toggleTheme()
+    }
+    return {
+      themeStore, 
+      toggleTheme, 
+    }
+  },
 }
 </script>

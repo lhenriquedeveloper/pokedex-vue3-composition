@@ -20,25 +20,12 @@ export interface PokemonResponse {
   results: Pokemon[];
 }
 
-export interface Region {
-  id: number;
-  name: string;
-}
-
-export interface Generation {
-  id: number;
-  name: string;
-}
 
 export interface Type {
   id: number;
   name: string;
 }
 
-
-export const makeConcurrentRequests = <T>(requests: Promise<T>[]): Promise<T[]> => {
-  return axios.all(requests);
-};
 
 // Get all Pokémon
 export const getAllPokemons = (): Promise<AxiosResponse<PokemonResponse>> => {
@@ -53,17 +40,6 @@ export const getPokemons = (offset: number, limit: number): Promise<AxiosRespons
 // Get Pokémon by name
 export const getPokemonByName = (name: string): Promise<AxiosResponse<Pokemon>> => {
   return API().get<Pokemon>(`/pokemon/${name}`);
-};
-
-
-// Get region by name
-export const getRegionByName = (name: string): Promise<AxiosResponse<Region>> => {
-  return API().get<Region>(`/region/${name}`);
-};
-
-// Get generation by ID
-export const getGenerationById = (id: number): Promise<AxiosResponse<Generation>> => {
-  return API().get<Generation>(`/generation/${id}`);
 };
 
 // Get type by name
