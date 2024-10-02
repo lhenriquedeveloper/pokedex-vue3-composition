@@ -1,19 +1,23 @@
 <template>
   <div
     v-if="isOpen && pokemon && pokemon.name"
-    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-8 lg:p-0"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 px-4 lg:px-8"
   >
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-3xl flex">
-      <div class="flex-shrink-0 w-1/3 flex justify-center items-center">
+    <div
+      class="bg-background dark:bg-gray-800 rounded-lg p-4 sm:p-6 w-full max-w-xl sm:max-w-2xl lg:max-w-3xl flex flex-col lg:flex-row"
+    >
+      <div
+        class="w-full lg:w-1/3 flex justify-center items-center mb-4 lg:mb-0"
+      >
         <img
           :src="pokemonImage"
           :alt="pokemon.name"
-          class="w-full h-auto object-cover rounded-lg"
+          class="hidden lg:block w-full h-auto object-cover rounded-lg"
         />
       </div>
-      <div class="w-2/3 pl-6">
+      <div class="w-full lg:w-2/3 lg:pl-6">
         <div class="flex justify-between items-center mb-4">
-          <h3 class="text-2xl font-bold text-primary capitalize">
+          <h3 class="text-xl sm:text-2xl font-bold text-primary capitalize">
             {{ pokemon.name }} (#{{ pokemon.id }})
           </h3>
           <button @click="closeModal" class="text-gray-500 hover:text-gray-700">
@@ -22,11 +26,11 @@
         </div>
         <div class="mb-4">
           <h4
-            class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center"
+            class="font-bold text-base mb-2 text-gray-900 dark:text-white flex items-center"
           >
-            Types <TypeOutline class="ml-2" />
+          {{ $t('types') }} <TypeOutline class="ml-2" />
           </h4>
-          <div class="flex space-x-2">
+          <div class="flex flex-wrap gap-2">
             <span
               v-for="type in pokemon.types"
               :key="type"
@@ -39,18 +43,17 @@
         </div>
         <div class="mb-4">
           <h4
-            class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center"
+            class="font-bold text-base mb-2 text-gray-900 dark:text-white flex items-center"
           >
-            Statistics <ChartNoAxesColumnDecreasing class="ml-2" />
+          {{ $t('Statistics') }} <ChartNoAxesColumnDecreasing class="ml-2" />
           </h4>
           <div v-for="(stat, index) in pokemon.stats" :key="index" class="mb-2">
-            <span
-              class="block text-muted-foreground dark:text-muted-darkForeground"
-              >{{ stat.name }}: {{ stat.value }}</span
-            >
+            <span class="block text-sm text-gray-600 dark:text-gray-300">
+              {{ stat.name }}: {{ stat.value }}
+            </span>
             <div class="w-full bg-gray-300 rounded-full h-2">
               <div
-                class="bg-primary dark:bg-primary-dark h-2 rounded-full transition-all duration-500 ease-out"
+                class="bg-primary dark:bg-primary-dark h-2 rounded-full transition-all duration-500"
                 :style="{ width: `${(stat.value / 255) * 100}%` }"
               ></div>
             </div>
@@ -58,27 +61,29 @@
         </div>
         <div v-if="evolutionChain.length" class="mb-4">
           <h4
-            class="font-bold text-base mb-4 text-black dark:text-white flex items-center flex-row"
+            class="font-bold text-base mb-2 text-black dark:text-white flex items-center"
           >
-            Evolution Chain <Link class="ml-2" />
+          {{ $t('EvolutionChain') }} <Link class="ml-2" />
           </h4>
-          <div class="flex flex-col lg:flex-row items-center space-x-4">
+          <div
+            class="flex flex-col space-y-4 sm:space-y-2 sm:flex-wrap items-center justify-center"
+          >
             <div
               v-for="evolution in evolutionChain"
               :key="evolution.name"
-              class="flex flex-col items-center p-4 rounded-lg transition-all duration-300 ease-in-out w-48 h-64 relative overflow-hidden shadow-lg cursor-pointer bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 hover:shadow-xl hover:scale-105"
+              class="flex items-center w-full p-2 transition-all duration-300 relative overflow-hidden shadow-lg cursor-pointer bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-300 hover:shadow-xl hover:scale-105 rounded-lg"
             >
-              <div
-                class="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-500 to-blue-500 h-8 rounded-t-lg"
-              ></div>
               <img
                 :src="evolution.image"
                 :alt="evolution.name"
-                class="w-32 h-32 object-contain rounded-full bg-gray-200 dark:bg-gray-700 border-4 border-indigo-500 dark:border-indigo-300 z-10 mt-6 mb-4"
+                class="w-12 h-12 sm:w-16 sm:h-16 object-contain rounded-full bg-gray-200 dark:bg-gray-700 border-2 sm:border-4 border-indigo-500 dark:border-indigo-300 z-10"
               />
-              <span class="capitalize text-lg font-semibold italic">{{
-                evolution.name
-              }}</span>
+
+              <span
+                class="ml-4 capitalize text-lg sm:text-xl font-semibold italic"
+              >
+                {{ evolution.name }}
+              </span>
             </div>
           </div>
         </div>
@@ -86,6 +91,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { ref, computed, watch } from "vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
@@ -95,6 +101,9 @@ import {
   ChartNoAxesColumnDecreasing,
   TypeOutline,
 } from "lucide-vue-next";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
 export default {
   props: {
     isOpen: {
@@ -114,6 +123,8 @@ export default {
   emits: ["onClose"],
 
   setup(props, { emit }) {
+    const $toast = useToast();
+
     const evolutionChain = ref([]);
 
     const pokemonImage = computed(() => {
@@ -126,7 +137,6 @@ export default {
       if (!props.pokemon || !props.pokemon.name) return;
 
       try {
-        console.log("Fetching evolution data for:", props.pokemon.name);
         const response = await axios.get(
           `https://pokeapi.co/api/v2/pokemon-species/${props.pokemon.name}`
         );
@@ -137,9 +147,15 @@ export default {
           evolutionChain.value = extractEvolutions(evolutionResponse.data);
         } else {
           console.warn("No evolution chain found for this Pokémon.");
+          let instaceWarn = $toast.info(
+            "No evolution chain found for this Pokémon."
+          );
         }
       } catch (error) {
         console.error("Error fetching Pokémon Species to Chain:", error);
+        let instaceError = $toast.error(
+          "Error fetching Pokémon Species to Chain."
+        );
       }
     };
 
@@ -194,3 +210,31 @@ export default {
   },
 };
 </script>
+<style scoped>
+.bg-white {
+  background-color: #ffffff;
+}
+.text-gray-900 {
+  color: #1f2937;
+}
+.hover\:scale-105:hover {
+  transform: scale(1.05);
+}
+
+.dark .bg-gray-800 {
+  background-color: #2d3748;
+}
+.dark .text-gray-300 {
+  color: #e2e8f0;
+}
+.dark .bg-gray-900 {
+  background-color: #1a202c;
+}
+.dark .border-indigo-300 {
+  border-color: #818cf8;
+}
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+</style>

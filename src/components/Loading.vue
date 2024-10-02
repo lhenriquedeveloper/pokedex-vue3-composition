@@ -18,7 +18,7 @@
       <div
         class="text-black dark:text-white text-2xl font-bold mt-4 text-center animate-bounce"
       >
-        Loading Pokédex...
+      {{ $t('loading') }}
       </div>
     </div>
   </div>

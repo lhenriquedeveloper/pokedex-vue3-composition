@@ -22,7 +22,7 @@
       class="m-4 p-2 bg-primary-dark align-middle justify-center flex flex-row w-64 items-center shadow-xl text-white rounded hover:opacity-75 transition-all duration-500"
       :disabled="loading || isAllLoaded"
     >
-      Show More <ChevronDown />
+    {{ $t('ShowMore') }} <ChevronDown />
     </button>
   </div>
 </template>

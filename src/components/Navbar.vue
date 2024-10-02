@@ -9,6 +9,14 @@
           </div>
         </div>
         <div class="flex items-center">
+          <div class="mr-4">
+            <button @click="changeLanguage('en')" class="text-muted-foreground hover:text-primary">
+              EN
+            </button>
+            <button @click="changeLanguage('pt')" class="text-muted-foreground hover:text-primary ml-2">
+              PT
+            </button>
+          </div>
           <SidebarMenu />
           <button
             type="button"
@@ -26,7 +34,7 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { useI18n } from 'vue-i18n';
 import { useThemeStore } from "../stores/themeStore";
 import { SunIcon, MoonIcon } from "lucide-vue-next";
 import SidebarMenu from "./SidebarMenu.vue";
@@ -39,15 +47,22 @@ export default {
   },
   setup() {
     const themeStore = useThemeStore();
+    const { locale } = useI18n(); 
 
     const toggleTheme = () => {
       themeStore.toggleTheme();
     };
 
+    const changeLanguage = (lang) => {
+      locale.value = lang;
+    };
+
     return {
       themeStore,
       toggleTheme,
+      changeLanguage,
     };
   },
 };
 </script>
+

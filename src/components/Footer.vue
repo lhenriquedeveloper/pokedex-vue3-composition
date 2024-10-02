@@ -12,11 +12,11 @@
         </div>
         <div class="flex flex-col items-center md:items-end space-y-2">
           <p class="text-sm flex flex-row gap-x-2">
-            developed with
+            {{ $t('footer') }}
             <HeartIcon
               class="w-5 h-5 text-primary dark:text-primary-dark animate-pulse"
             />
-            by
+            {{ $t('by') }}
             <a
               href="https://github.com/lhenriquedeveloper"
               class="font-semibold text-primary dark:text-primary-dark hover:underline transition-colors duration-300"
@@ -26,7 +26,7 @@
               lhenriquedeveloper
             </a>
           </p>
-          <p class="text-sm">&copy; {{ currentYear }} All rights reserved.</p>
+          <p class="text-sm">&copy; {{ currentYear }} {{ $t('arr') }}.</p>
         </div>
       </div>
     </div>

@@ -71,6 +71,9 @@ import axios from "axios";
 import PokemonModal from "./PokemonModal.vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
 import { Heart } from "lucide-vue-next";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+
 export default {
   props: {
     name: {
@@ -90,6 +93,10 @@ export default {
   },
 
   setup(props) {
+    const $toast = useToast();
+
+
+    
     const pokemon = ref({
       id: null,
       name: "",
@@ -116,6 +123,9 @@ export default {
         checkFavoriteStatus();
       } catch (error) {
         console.error("Error fetching Pokémon data:", error);
+        let instaceWarn = $toast.info(
+            "Error fetching Pokémon data."
+          );
       }
     };
 
@@ -142,9 +152,7 @@ export default {
     };
 
     const openModal = () => {
-      console.log("Modal Opened");
       isModalOpen.value = true;
-      console.log("isModalOpen", isModalOpen.value);
     };
 
     const closeModal = () => {

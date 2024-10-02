@@ -22,7 +22,7 @@
           <h2
             class="text-lg font-bold text-primary dark:text-primary-dark mb-2"
           >
-            Favorite Pokemons:
+          {{ $t('favoritePokemons') }}
           </h2>
           <ul>
             <li
