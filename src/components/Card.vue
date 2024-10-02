@@ -19,8 +19,8 @@
           @click.stop="toggleFavorite"
           class="absolute top-2 left-2 text-white focus:outline-none"
         >
-          <Heart v-if="!isFavorite" class="text-primary"/>
-          <Heart v-if="isFavorite" class="text-primary" fill="#ff4757"/>
+          <Heart v-if="!isFavorite" class="text-primary" />
+          <Heart v-if="isFavorite" class="text-primary" fill="#ff4757" />
         </button>
       </div>
       <div class="p-4">
@@ -77,6 +77,7 @@ export default {
       type: String,
       required: true,
     },
+
     url: {
       type: String,
       required: true,

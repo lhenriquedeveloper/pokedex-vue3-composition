@@ -1,13 +1,13 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useThemeStore = defineStore('theme', {
+export const useThemeStore = defineStore("theme", {
   state: () => ({
-    isDarkMode: false, 
+    isDarkMode: false,
   }),
   actions: {
     toggleTheme() {
-      this.isDarkMode = !this.isDarkMode
-      document.body.classList.toggle('dark', this.isDarkMode)
+      this.isDarkMode = !this.isDarkMode;
+      document.body.classList.toggle("dark", this.isDarkMode);
     },
   },
-})
+});

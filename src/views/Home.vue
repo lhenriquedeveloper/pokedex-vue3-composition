@@ -2,7 +2,7 @@
   <div class="mt-8 px-4 md:p-0">
     <Searchbar @filter="onFilter" @clear="onClear" />
     <div v-if="loading" class="flex justify-center items-center mt-4">
-      <Loading/>
+      <Loading />
     </div>
   </div>
   <div
@@ -31,10 +31,9 @@
 import { ref, onMounted } from "vue";
 import Searchbar from "../components/Searchbar.vue";
 import Card from "../components/Card.vue";
-import Loading from '../components/Loading.vue'
+import Loading from "../components/Loading.vue";
 import { getPokemons } from "../composables/services.ts";
 import { ChevronDown } from "lucide-vue-next";
-
 
 interface Pokemon {
   name: string;
@@ -53,25 +52,24 @@ export default {
     const filteredPokemons = ref<Pokemon[]>([]);
     const searchParams = ref({ query: "", type: "" });
     const loading = ref(false);
-    const offset = ref(0); // Para rastrear o deslocamento atual
-    const limit = 20; // Número de Pokémons por vez
-    const isAllLoaded = ref(false); // Para rastrear se todos os Pokémons foram carregados
+    const offset = ref(0);
+    const limit = 20;
+    const isAllLoaded = ref(false);
 
     const fetchPokemons = async () => {
       try {
         loading.value = true;
-        const response = await getPokemons(offset.value, limit); // Passa offset e limit
-        const newPokemons = response.data.results.map((pokemon) => ({
+        const response = await getPokemons(offset.value, limit);
+        const newPokemons: any = response.data.results.map((pokemon) => ({
           ...pokemon,
         }));
 
-        // Se não houver novos Pokémons, desabilita o botão de carregar mais
         if (newPokemons.length < limit) {
           isAllLoaded.value = true;
         }
 
-        pokemons.value.push(...newPokemons); // Adiciona novos Pokémons ao array existente
-        filterPokemons(); // Chama a função de filtro após carregar novos Pokémons
+        pokemons.value.push(...newPokemons);
+        filterPokemons();
       } catch (error) {
         console.error("Error fetching Pokémon:", error);
       } finally {
@@ -88,13 +86,13 @@ export default {
           const matchesId = pokemon.url.includes(query);
           return matchesName || matchesId;
         })
-        .slice(0, offset.value + limit); // Aplica filtro e paginação
+        .slice(0, offset.value + limit);
     };
 
     const onFilter = async (params: { query: string; type: string }) => {
       searchParams.value = params;
       loading.value = true;
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulando carregamento
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       filterPokemons();
       loading.value = false;
     };
@@ -104,12 +102,12 @@ export default {
       filteredPokemons.value = [...pokemons.value].slice(
         0,
         offset.value + limit
-      ); // Reseta a lista filtrada
+      );
     };
 
     const loadMore = () => {
-      offset.value += limit; // Incrementa o offset
-      fetchPokemons(); // Busca mais Pokémons
+      offset.value += limit;
+      fetchPokemons();
     };
 
     onMounted(() => {

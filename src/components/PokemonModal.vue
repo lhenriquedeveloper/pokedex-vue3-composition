@@ -21,8 +21,10 @@
           </button>
         </div>
         <div class="mb-4">
-          <h4 class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center">
-            Types <TypeOutline class="ml-2"/>
+          <h4
+            class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center"
+          >
+            Types <TypeOutline class="ml-2" />
           </h4>
           <div class="flex space-x-2">
             <span
@@ -36,8 +38,10 @@
           </div>
         </div>
         <div class="mb-4">
-          <h4 class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center">
-            Statistics <ChartNoAxesColumnDecreasing class="ml-2"/>
+          <h4
+            class="font-bold text-base mb-4 text-[#3d3d3d] dark:text-white flex flex-row items-center"
+          >
+            Statistics <ChartNoAxesColumnDecreasing class="ml-2" />
           </h4>
           <div v-for="(stat, index) in pokemon.stats" :key="index" class="mb-2">
             <span
@@ -53,8 +57,10 @@
           </div>
         </div>
         <div v-if="evolutionChain.length" class="mb-4">
-          <h4 class="font-bold text-base mb-4 text-black dark:text-white flex items-center flex-row">
-            Evolution Chain <Link class="ml-2"/> 
+          <h4
+            class="font-bold text-base mb-4 text-black dark:text-white flex items-center flex-row"
+          >
+            Evolution Chain <Link class="ml-2" />
           </h4>
           <div class="flex flex-col lg:flex-row items-center space-x-4">
             <div
@@ -80,14 +86,15 @@
     </div>
   </div>
 </template>
-
 <script>
 import { ref, computed, watch } from "vue";
 import { getTypeColor } from "../composables/utils/getTypeColor.ts";
 import axios from "axios";
-import { Link, ChartNoAxesColumnDecreasing, TypeOutline } from 'lucide-vue-next'
-
-
+import {
+  Link,
+  ChartNoAxesColumnDecreasing,
+  TypeOutline,
+} from "lucide-vue-next";
 export default {
   props: {
     isOpen: {
@@ -99,7 +106,7 @@ export default {
       required: true,
     },
   },
-  components:{
+  components: {
     Link,
     ChartNoAxesColumnDecreasing,
     TypeOutline,
@@ -165,22 +172,18 @@ export default {
       }
       return evolutions;
     };
-
-    // Verificação das mudanças em pokemon e isOpen
     watch(
-      () => [props.pokemon, props.isOpen], // Monitorar pokemon e isOpen juntos
+      () => [props.pokemon, props.isOpen],
       ([newPokemon, newIsOpen]) => {
         if (newIsOpen && newPokemon && newPokemon.name) {
-          fetchEvolutionData(); // Executa a busca quando o modal abre e pokemon está disponível
+          fetchEvolutionData();
         }
       },
-      { immediate: true } // Executa imediatamente para garantir a verificação inicial
+      { immediate: true }
     );
-
     const closeModal = () => {
       emit("onClose");
     };
-
     return {
       evolutionChain,
       pokemonImage,

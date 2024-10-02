@@ -4,7 +4,7 @@
       <div class="flex justify-between h-16">
         <div class="flex">
           <div class="flex-shrink-0 flex items-center">
-            <img src="../assets/pokeballs.png" class="w-8" alt="PokedexIcon">
+            <img src="../assets/pokeballs.png" class="w-8" alt="PokedexIcon" />
             <span class="ml-2 text-2xl font-bold text-primary">Pokedex</span>
           </div>
         </div>
@@ -26,26 +26,24 @@
 </template>
 
 <script>
-import { computed } from 'vue';
-import { useThemeStore } from '../stores/themeStore';
-import { SunIcon, MoonIcon } from 'lucide-vue-next';
-import SidebarMenu from './SidebarMenu.vue'; // Importa o novo componente
+import { computed } from "vue";
+import { useThemeStore } from "../stores/themeStore";
+import { SunIcon, MoonIcon } from "lucide-vue-next";
+import SidebarMenu from "./SidebarMenu.vue";
 
 export default {
   components: {
     SunIcon,
     MoonIcon,
-    SidebarMenu, // Registra o novo componente
+    SidebarMenu,
   },
   setup() {
-    // Inicializando a store
     const themeStore = useThemeStore();
 
-    // Função para alternar entre os temas
     const toggleTheme = () => {
       themeStore.toggleTheme();
     };
-    
+
     return {
       themeStore,
       toggleTheme,

@@ -56,7 +56,7 @@ export default {
     const clearSearch = () => {
       internalSearchQuery.value.query = "";
       internalSearchQuery.value.type = "";
-      emit("clear"); // Emite o evento para limpar a busca no componente pai
+      emit("clear"); 
     };
 
     return {

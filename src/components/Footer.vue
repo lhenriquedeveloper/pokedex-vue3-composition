@@ -39,7 +39,7 @@ import { HeartIcon } from "lucide-vue-next";
 
 export default {
   components: {
-    HeartIcon, // Registra o componente HeartIcon para uso no template
+    HeartIcon,
   },
   setup() {
     const currentYear = ref(new Date().getFullYear());

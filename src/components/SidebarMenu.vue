@@ -3,7 +3,7 @@
     <button @click="toggleSidebar" class="p-2">
       <MenuIcon class="h-6 w-6 text-primary dark:text-primary-dark" />
     </button>
-    
+
     <transition name="fade">
       <div
         v-if="isSidebarOpen"
@@ -19,7 +19,11 @@
         :class="{ 'slide-in': isSidebarOpen, 'slide-out': !isSidebarOpen }"
       >
         <div class="p-4">
-          <h2 class="text-lg font-bold text-primary dark:text-primary-dark mb-2">Favorite Pokemons:          </h2>
+          <h2
+            class="text-lg font-bold text-primary dark:text-primary-dark mb-2"
+          >
+            Favorite Pokemons:
+          </h2>
           <ul>
             <li
               v-for="pokemon in favorites"
@@ -36,8 +40,8 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
-import { MenuIcon } from 'lucide-vue-next';
+import { ref, computed } from "vue";
+import { MenuIcon } from "lucide-vue-next";
 
 export default {
   components: {
@@ -55,7 +59,7 @@ export default {
     };
 
     const favorites = computed(() => {
-      return JSON.parse(localStorage.getItem('favorites')) || [];
+      return JSON.parse(localStorage.getItem("favorites")) || [];
     });
 
     return {
@@ -69,20 +73,22 @@ export default {
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.3s ease;
 }
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
 .slide-in {
   transform: translateX(0);
-  transition: transform 0.4s ease-in-out; /* Aumentamos a duração para 0.4s */
+  transition: transform 0.4s ease-in-out;
 }
 
 .slide-out {
   transform: translateX(100%);
-  transition: transform 0.4s ease-in-out; /* Aumentamos a duração para 0.4s */
+  transition: transform 0.4s ease-in-out;
 }
 </style>
